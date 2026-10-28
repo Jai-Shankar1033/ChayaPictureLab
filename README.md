@@ -3,6 +3,7 @@
 **ChayaPictureLab** is an educational Digital Image Processing laboratory built with Python, NumPy, Pillow, and Streamlit. It lets you load an image, run an operation, compare outputs, perform noise-and-restoration experiments using MSE/PSNR, and export an experiment report.
 
 The core processing routines in `chayalab/` are implemented with NumPy so their mathematical steps can be inspected. OpenCV is used only for optional reference checks and validation; it is not used to generate the app's normal processing outputs.
+You can refer https://chayapicturelab.streamlit.app/
 
 ## Features
 
