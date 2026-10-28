@@ -1,0 +1,6 @@
+numpy>=1.26
+Pillow>=10.0
+matplotlib>=3.8
+streamlit>=1.52
+# OpenCV is used only as an optional *reference* for validation (tests + one app button).
+opencv-python-headless>=4.8

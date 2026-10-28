@@ -1,0 +1,11 @@
+Manual implementations vs OpenCV 4.13.0, NumPy 2.4.4
+
+scene.png         equalize max|diff|=0 | Otsu ours/OpenCV=132/132 | adaptive agree=93.45% | gaussian max|diff|=1 | median interior equal=100.0% | Sobel Gx identical=True | our Canny pixels within 2 px of cv2.Canny=100.0%
+low_contrast.png  equalize max|diff|=0 | Otsu ours/OpenCV=118/118 | adaptive agree=98.33% | gaussian max|diff|=1 | median interior equal=100.0% | Sobel Gx identical=True | our Canny pixels within 2 px of cv2.Canny=100.0%
+texture.png       equalize max|diff|=0 | Otsu ours/OpenCV=94/94 | adaptive agree=96.89% | gaussian max|diff|=1 | median interior equal=100.0% | Sobel Gx identical=True | our Canny pixels within 2 px of cv2.Canny=100.0%
+shapes.png        equalize max|diff|=0 | Otsu ours/OpenCV=0/0 | adaptive agree=100.00% | gaussian max|diff|=1 | median interior equal=100.0% | Sobel Gx identical=True | our Canny pixels within 2 px of cv2.Canny=90.6%
+
+Restoration on scene.png (grayscale), seed 42
+  PSNR (dB), salt & pepper 5 %: noisy 18.69 | mean 3x3 27.31 | median 3x3 39.01 | mode 3x3 22.74 | gaussian s=1.2 29.43
+  PSNR (dB), Gaussian sigma 25: noisy 20.16 | mean 3x3 28.64 | median 3x3 27.51 | mode 3x3 16.96 | gaussian s=1.2 30.68
+  mode vs median output differ on 51.7 % of pixels (S&P image)
