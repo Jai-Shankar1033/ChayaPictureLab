@@ -109,6 +109,74 @@ chayalab/
 - **Streamlit:** application interface and controls.
 - **Matplotlib:** plots and histogram visualisation.
 - **OpenCV:** optional reference comparison in validation tests and the app's validation control; not used to produce standard processed-image outputs.
+  ## Research Areas
+
+ChayaPictureLab explores the following areas of Digital Image Processing (DIP):
+
+| Research Area | Topics Covered in ChayaPictureLab |
+|---|---|
+| Image Enhancement | Brightness adjustment, contrast enhancement, gamma correction, logarithmic transformation, and histogram equalization |
+| Colour Image Processing | RGB, grayscale, HSV decomposition, colour-channel extraction, isolation, swapping, and adjustment |
+| Histogram Processing and Thresholding | Histogram analysis, histogram stretching, equalization, Otsu thresholding, and adaptive thresholding |
+| Image Filtering and Restoration | Mean, Gaussian, median, mode, minimum, maximum, Laplacian, sharpening, and noise removal |
+| Edge Detection | Sobel, Prewitt, Roberts, and Canny edge detection with gradient direction analysis |
+| Mathematical Morphology | Erosion, dilation, opening, closing, and boundary extraction using different structuring elements |
+| Image Quality Assessment | Mean Squared Error (MSE), Peak Signal-to-Noise Ratio (PSNR), entropy, and contrast measurement |
+| Comparative Algorithm Analysis | Comparing multiple image-processing operations through output visualisation, parameter analysis, and execution time |
+
+## Research Papers and Academic References
+
+The development and theoretical study of ChayaPictureLab are supported by established research publications and academic references in Digital Image Processing.
+
+### Selected Research Papers
+
+**[1] Automatic Image Thresholding**
+
+N. Otsu, "A Threshold Selection Method from Gray-Level Histograms," *IEEE Transactions on Systems, Man, and Cybernetics*, vol. 9, no. 1, pp. 62–66, January 1979.
+
+DOI: https://doi.org/10.1109/TSMC.1979.4310076
+
+Application: Provides the theoretical foundation for Otsu's automatic image thresholding method used in the project.
+
+**[2] Edge Detection**
+
+J. Canny, "A Computational Approach to Edge Detection," *IEEE Transactions on Pattern Analysis and Machine Intelligence*, vol. PAMI-8, no. 6, pp. 679–698, 1986.
+
+DOI: https://doi.org/10.1109/TPAMI.1986.4767851
+
+Application: Provides the research foundation for Canny edge detection and the study of image boundaries.
+
+**[3] Image Filtering and Restoration**
+
+T. S. Huang, G. J. Yang, and G. Y. Tang, "A Fast Two-Dimensional Median Filtering Algorithm," *IEEE Transactions on Acoustics, Speech, and Signal Processing*, vol. 27, no. 1, pp. 13–18, February 1979.
+
+DOI: https://doi.org/10.1109/TASSP.1979.1163188
+
+Application: Provides research background for two-dimensional median filtering and noise reduction.
+
+### Foundational Academic Textbooks
+
+**[4] Digital Image Processing**
+
+Rafael C. Gonzalez and Richard E. Woods, *Digital Image Processing*, 4th Edition, Pearson, 2018.
+
+ISBN: 9789353062989.
+
+Application: Provides the broader theoretical background for image enhancement, filtering, histogram processing, image restoration, segmentation, and image analysis.
+
+**[5] Mathematical Morphology**
+
+Jean Serra, *Image Analysis and Mathematical Morphology*, Academic Press, 1982.
+
+Application: Provides the mathematical foundation for morphological operations, including erosion, dilation, opening, and closing.
+
+## Acknowledgment
+
+ChayaPictureLab acknowledges the researchers and academic authors whose published work has contributed to the development of Digital Image Processing. The research papers and textbooks listed above were used as academic references to understand the mathematical concepts, working principles, and theoretical foundations of the image-processing techniques explored in this project.
+
+Their contributions provide valuable knowledge for studying image enhancement, thresholding, filtering, restoration, edge detection, and mathematical morphology.
+
+The project applies these concepts through its own Python and NumPy-based processing implementations. The references are credited for their research contributions and theoretical foundations.
 
 ## Project history, attribution, and licence
 
