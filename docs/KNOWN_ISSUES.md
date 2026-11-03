@@ -1,29 +1,23 @@
-# Known issues, unavailable checks and uncertainties
+# Known issues and software limitations
 
-## Limitations of the software
-1. **Mode filter speed.** Cost grows with the number of distinct grey levels. Measured on a random 1024x768 image:
-   about 2.7 s (gray) and 8 s (colour). The UI warns and the noise experiment defaults to grayscale.
-2. **Mode filter on continuous noisy photos is a poor denoiser** (it needs repeated values). On the noisy sample it
-   scored PSNR 22.7 dB vs 39.0 dB for the median at 5% salt-and-pepper. This is expected behaviour, not a bug.
-3. **Adaptive threshold** differs from OpenCV on 2-7% of interior pixels of natural-looking images because OpenCV rounds
-   the local mean to an integer (reproduced exactly in `tests/test_histogram.py`). Ours uses the exact mean.
-4. **Canny** thresholds are fractions of the maximum thinned gradient, not OpenCV's absolute values, so settings are not
-   interchangeable. Results agree with `cv2.Canny` only approximately (see the report).
-5. **Colour histogram equalization** is not offered (equalizing R, G, B separately shifts colours); colour input is converted
-   to grayscale first and the UI says so.
-6. Images are shrunk on load (default longest side 1024 px). Geometric operations (resize, rotate, flip) are out of scope.
-7. Session history lives in browser-session memory only; refreshing the page clears it.
+This page describes known limitations of the application. Testing coverage and release/licensing tasks are tracked separately in [Validation status](VALIDATION_STATUS.md).
 
-## Checks that were NOT performed
-* No code-similarity tool (MOSS, JPlag, etc.) was run, and GitHub was **not** searched exhaustively.
-* Only two files of the earlier repository were compared line by line (see `originality_review.md`).
-* Tested only on Linux with Python 3.12.3 (NumPy 2.4.4, OpenCV 4.13.0, Pillow 12.1.1, Streamlit 1.66.1).
-  Windows/macOS and other Python versions were not run.
-* No manual testing with real browser file-upload of a user photo; upload was tested through the loader function with
-  generated PNG/JPEG/BMP bytes, and the UI through bundled samples (AppTest + Playwright screenshots).
-* Dependency installation in a clean virtual environment: see the final verification section of the report.
+## Processing limitations
 
-## Licensing uncertainties
-* `LICENSE` has a **placeholder name** that you must replace.
-* Third-party licence names in `THIRD_PARTY_NOTICES.md` were not read from installed metadata.
-* Whether retaining the upstream MIT notice is sufficient for your college is for your instructor to decide.
+1. **Mode filter performance.** The mode filter becomes slower as the number of distinct grey levels increases. In the recorded measurement on a random 1024 × 768 image, it took about 2.7 seconds for grayscale input and 8 seconds for colour input. These are observations from one test environment, not performance guarantees; timings will vary with hardware and input data.
+
+2. **Mode filtering is not a good general-purpose denoiser for continuous-tone photos.** The mode filter works best when neighbourhoods contain repeated values. In one recorded 5% salt-and-pepper noise experiment, the mode-filter result measured 22.7 dB PSNR, compared with 39.0 dB for the median-filter result. This is an example from the tested sample, not a result that should be expected for every image.
+
+3. **Adaptive threshold comparison.** The implementation uses the exact local mean. OpenCV rounds the local mean to an integer, so the two methods can differ on some interior pixels. The recorded comparison found differences on approximately 2–7% of interior pixels in the tested natural-looking images. The expected rounding difference is covered in `tests/test_histogram.py`.
+
+4. **Canny threshold settings are not directly interchangeable with OpenCV.** This implementation expresses its thresholds as fractions of the maximum thinned gradient. OpenCV uses absolute threshold values. The resulting edge maps can be compared, but agreement is approximate rather than pixel-identical. See `docs/validation_numbers.txt` for the recorded comparison, if that file is present in the repository.
+
+5. **Colour histogram equalization is not provided.** Equalizing the red, green, and blue channels independently can shift colours. For this operation, colour input is converted to grayscale first, and the interface explains this behaviour.
+
+6. **Input resizing and geometric operations.** Images are reduced during loading when their longest side exceeds the configured maximum; the default maximum is 1024 pixels. General geometric processing operations such as resize, rotate, and flip are outside the current project scope. Resizing during loading is an input-size safeguard, not a general-purpose resize operation.
+
+7. **Session history is temporary.** Experiment history is stored in browser-session memory. Refreshing or ending the session clears that history. Download the JSON history or export the HTML report before ending a session when a permanent copy is needed.
+
+## Reporting a problem
+
+When reporting an issue, include the operation name, input image dimensions and colour mode, parameter values, Python/package versions, and the steps needed to reproduce the result. Do not include private images unless you are comfortable sharing them.
