@@ -203,11 +203,6 @@ Their contributions provide valuable knowledge for studying image enhancement, t
 
 The project applies these concepts through its own Python and NumPy-based processing implementations. The references are credited for their research contributions and theoretical foundations.
 
-## Project history, attribution, and licence
-
-This release was developed from an earlier ChayaPictureLab archive. Two processing modules in that earlier archive were found to match code in a public MIT-licensed image-processing project. The current chayalab/ package was reimplemented, and the scope and limits of the review are described in THIRD_PARTY_NOTICES.md.
-
-The project history is stated here for transparency; it does not imply a personal relationship with the earlier project's author or that the current release depends on that repository at runtime. See THIRD_PARTY_NOTICES.md for third-party library notices and the project's recorded source history.
 
 
 ## Known limitations
