@@ -28,6 +28,31 @@ Operation pages show the method's purpose, relevant formula, and which parts use
 
 ## Install and run
 
+### Modern web interface (React + FastAPI)
+
+The existing Streamlit app remains available below. To run the new web interface, install the Python requirements and the Node dependencies, then start the API and Vite development server in separate terminals:
+
+```powershell
+python -m pip install -r requirements.txt
+python -m uvicorn api:app --reload --port 8000
+cd frontend
+npm install
+npm run dev
+```
+
+Open <http://localhost:5173>. Vite proxies `/api` requests to the local FastAPI service in development. In deployment, Vercel serves the React frontend from `frontend/dist` and proxies the original relative `/api/...` paths to the Render FastAPI service. Render starts the existing `api:app` entry point using `requirements-render.txt`; that file includes the API's external runtime dependencies and does not install Streamlit, Matplotlib, or OpenCV. The root `requirements.txt` remains available for the original Streamlit app and full local development.
+
+#### Vercel + Render deployment
+
+1. Create a Render **Web Service** from the repository with root directory `.`, runtime **Python 3**, build command `pip install -r requirements-render.txt`, and start command `uvicorn api:app --host 0.0.0.0 --port $PORT`.
+2. After Render creates the service, replace `YOUR-RENDER-SERVICE` in the external API rewrite in `vercel.json` with the service's actual `onrender.com` hostname.
+3. Import the repository into Vercel with the repository root (`./`) as the project root and framework **Vite**. The install command, build command, output directory, API proxy, and React route fallback are in `vercel.json`.
+4. Deploy a Vercel preview and check `/api/health`, `/api/operations`, sample loading, image upload, and a real processing operation before promoting it.
+
+For this academic demonstration, the FastAPI API keeps uploaded source images, operation results, report images, and history in the process-local `SESSIONS` dictionary. Session data is temporary and may be lost when the backend restarts. The API accepts client-provided session IDs and is intended for demonstration use, not private multi-user production workloads.
+
+### Existing Streamlit interface
+
 ### Windows PowerShell
 
 From the project root directory, run:

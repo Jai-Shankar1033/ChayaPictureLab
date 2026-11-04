@@ -14,3 +14,13 @@ Thumbs.db
 # local outputs
 *.log
 report_*.html
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+.vercel/

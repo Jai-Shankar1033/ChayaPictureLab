@@ -1,0 +1,6 @@
+# Runtime dependencies for the Render FastAPI service and local NumPy engine.
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.20
+numpy>=1.26
+Pillow>=10.0

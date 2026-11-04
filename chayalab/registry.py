@@ -84,11 +84,11 @@ _add("Log transform", "Point & colour", point_ops.log_transform,
      formula=r"g = c\,\ln(1+f),\quad c=\frac{255}{\ln 256}")
 _add("Grayscale", "Point & colour", cs.to_grayscale,
      [P("method", "Weights", "choice", "bt601", options=list(cs.GRAY_WEIGHTS))],
-     purpose="Weighted sum of R, G, B.", formula=r"Y = 0.299R + 0.587G + 0.114B \;(\text{BT.601})")
+     purpose="Weighted sum of R, G, B.", formula=r"Y = wR·R + wG·G + wB·B; weights follow the selected method (BT.601: 0.299, 0.587, 0.114)")
 _add("Extract channel (gray)", "Point & colour", cs.extract_channel, [CH],
      purpose="Shows one colour channel as a grayscale image.", formula=r"g = C(x,y),\; C\in\{R,G,B\}")
 _add("Isolate channel (colour)", "Point & colour", cs.isolate_channel, [CH],
-     purpose="Keeps one channel and zeroes the others.", formula=r"g = (C,0,0)\ \text{etc.}")
+     purpose="Keeps one selected channel and zeroes the others.", formula=r"g_j = C_j if j = c, else 0")
 _add("Swap channels", "Point & colour", cs.swap_channels,
      [P("order", "Output order", "choice", "GRB", options=["GRB", "BGR", "RBG", "GBR", "BRG"],
         help="'GRB' = swap red and green")],
@@ -108,7 +108,7 @@ def _hsv_op(img):
 
 _add("HSV decomposition", "Point & colour", _hsv_op,
      purpose="Output is the Hue image; Saturation and Value are shown as extras.",
-     formula=r"V=\max(R,G,B),\; S=\frac{V-\min}{V}")
+     formula=r"V = max(R,G,B); S = (V - min(R,G,B))/V (0 if V=0); H follows the max-channel branch (0 when all channels match)")
 
 # ---------------------------------------------------------------- Histogram & enhancement
 _add("Histogram stretching", "Histogram & enhancement", histogram.stretch,
@@ -140,7 +140,7 @@ _add("Adaptive threshold", "Histogram & enhancement", histogram.adaptive_thresho
 
 # ---------------------------------------------------------------- Filtering
 _add("Mean filter", "Filtering", filters.mean_filter, [KS(3)], purpose="Replaces each pixel by the window average.",
-     formula=r"g=\frac1{k^2}\sum_{W}f")
+     formula=r"g = (1/k^2) · sum over W (f)")
 _add("Gaussian filter", "Filtering", filters.gaussian_filter,
      [P("sigma", "Sigma", "float", 1.5, 0.1, 10.0, 0.1)], purpose="Weighted average with Gaussian weights.",
      formula=r"w(x,y)\propto e^{-(x^2+y^2)/2\sigma^2}")
@@ -185,7 +185,7 @@ _add("Canny edges", "Edge detection", _canny,
      [P("sigma", "Sigma", "float", 1.4, 0.3, 5.0, 0.1), P("low", "Low threshold", "float", 0.05, 0.0, 1.0, 0.01),
       P("high", "High threshold", "float", 0.15, 0.0, 1.0, 0.01)], needs_gray=True,
      purpose="Smooth -> gradient -> thin -> double threshold -> hysteresis (all stages manual).",
-     formula=r"\text{NMS}+\text{hysteresis}(T_{low},T_{high})")
+     formula=r"Gaussian smoothing → Sobel gradient → non-maximum suppression → double thresholds (fractions of max) → hysteresis")
 _add("Gradient direction (Sobel)", "Edge detection",
      lambda img: edges.direction_image(img, "sobel"), needs_gray=True,
      purpose="Hue encodes edge direction, brightness encodes strength.", formula=r"\theta=\mathrm{atan2}(G_y,G_x)")
@@ -215,7 +215,7 @@ for _name, _fn, _txt, _f in (
 _add("Boundary extraction", "Morphology", _morph(morphology.boundary),
      list(_SE) + [P("kind", "Boundary type", "choice", "internal", options=["internal", "external", "gradient"])],
      needs_gray=True, purpose="Outlines objects: internal = f - erosion, external = dilation - f.",
-     formula=r"\beta(f)=f-(f\ominus B)")
+     formula=r"Internal: β(f)=f-(f⊖B); External: β(f)=(f⊕B)-f; Gradient: β(f)=(f⊕B)-(f⊖B)")
 
 
 def operations_in(category: str) -> list[str]:
