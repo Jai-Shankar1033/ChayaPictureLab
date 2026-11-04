@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://YOUR-RENDER-SERVICE.onrender.com/api/:path*"
+      "destination": "https://chayapicturelab.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
