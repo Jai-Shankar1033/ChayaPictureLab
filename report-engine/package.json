@@ -1,0 +1,35 @@
+{
+  "name": "chayalab-hyper-elements-report-engine",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "demo": "tsx src/demo.tsx"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@hyper-elements/email-clients": "^0.5.3",
+    "@hyper-elements/react": "^0.5.2",
+    "@react-pdf/renderer": "^4.9.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "express": "^5.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "satori": "^0.33.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.5",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "tsx": "^4.23.15",
+    "typescript": "~5.6.2"
+  },
+  "overrides": {
+    "fflate": "0.7.5"
+  }
+}

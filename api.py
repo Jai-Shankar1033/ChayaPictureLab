@@ -156,6 +156,90 @@ def analysis(x_session_id: str = Header(default="")):
     return {"stats": metrics.image_stats(state["source"]), "history": json.loads(state["log"].to_json()), "rows": state["log"].rows(), "histogram": histogram.compute_histogram(cs.to_grayscale(state["source"])).tolist()}
 
 
+@app.get("/api/report-data")
+def report_data(x_session_id: str = Header(default="")):
+    """Provide actual experiment data to the Hyper Elements report service."""
+
+    # Never create a new session when requesting a report.
+    if not x_session_id or len(x_session_id) > 128:
+        raise HTTPException(401, "A valid session ID is required")
+
+    state = SESSIONS.get(x_session_id)
+
+    if state is None:
+        raise HTTPException(404, "Session not found or expired")
+
+    source = state.get("source")
+    last_image = state.get("last_image")
+    records = state["log"].records
+
+    if source is None:
+        raise HTTPException(400, "Load an image before generating a report")
+
+    if last_image is None or not records:
+        raise HTTPException(400, "Run an image-processing operation first")
+
+    operation_key, processed = last_image
+    operation = R.OPERATIONS.get(operation_key)
+
+    if operation is None:
+        raise HTTPException(400, "Latest operation is unavailable")
+
+    record = records[-1]
+
+    source_info = serialize_image(source)
+    processed_info = serialize_image(processed)
+    output_stats = metrics.image_stats(processed)
+
+    return {
+        "reportId": str(uuid.uuid4()),
+        "title": "Scientific Image Processing Report",
+        "generatedAt": time.strftime(
+            "%Y-%m-%dT%H:%M:%SZ", time.gmtime()
+        ),
+        "sourceName": state.get("name") or "Uploaded image",
+        "dataLabel": "LIVE EXPERIMENT DATA",
+
+        "image": {
+            "width": source_info["width"],
+            "height": source_info["height"],
+            "channels": source_info["channels"],
+        },
+
+        "operation": {
+            "name": operation_key.replace("_", " ").replace("-", " ").title(),
+            "category": operation.category,
+            "purpose": operation.purpose,
+            "formula": operation.formula,
+            "parameters": dict(record.parameters),
+        },
+
+        "processingMs": float(record.seconds) * 1000.0,
+
+        "statistics": {
+            "mean": output_stats["mean"],
+            "standardDeviation": output_stats["std"],
+            "entropyBits": output_stats["entropy_bits"],
+            "rmsContrast": output_stats["rms_contrast"],
+        },
+
+        "originalImage": {
+            "src": "data:image/png;base64," + source_info["data"],
+            "width": source_info["width"],
+            "height": source_info["height"],
+            "alt": "Original source image",
+        },
+
+        "processedImage": {
+            "src": "data:image/png;base64," + processed_info["data"],
+            "width": processed_info["width"],
+            "height": processed_info["height"],
+            "alt": "Processed result image",
+        },
+    }
+
+
+
 @app.get("/api/history.json")
 def history(x_session_id: str = Header(default="")):
     return Response(session(x_session_id)["log"].to_json(), media_type="application/json", headers={"Content-Disposition": "attachment; filename=chayapicturelab_history.json"})

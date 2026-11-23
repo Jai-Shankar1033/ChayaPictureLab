@@ -24,3 +24,11 @@ dist/
 .env.*
 !.env.example
 .vercel/
+
+# Hyper Elements local build artifacts
+report-engine/output/
+report-engine/output.zip
+
+# Integration safety backups
+*.integration-backup
+backup-before-hyper-elements-*/
