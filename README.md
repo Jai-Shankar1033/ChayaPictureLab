@@ -1,185 +1,478 @@
 # ChayaPictureLab
 
-**ChayaPictureLab** is an educational Digital Image Processing laboratory built with Python, NumPy, Pillow, and Streamlit. It lets you load an image, run an operation, compare outputs, perform noise-and-restoration experiments using MSE/PSNR, and export an experiment report.
+### ChayaLab Scientific Report Kit | Hyper Elements Template Challenge 2026
 
-The core processing routines in `chayalab/` are implemented with NumPy so their mathematical steps can be inspected. OpenCV is used only for optional reference checks and validation; it is not used to generate the app's normal processing outputs.
-You can refer https://chayapicturelab.streamlit.app/
+**ChayaPictureLab** is an educational Digital Image Processing laboratory that combines mathematical image-processing implementations with interactive experimentation, algorithm comparison, image-quality analysis, and scientific report generation.
 
-## Features
+Built with Python, NumPy, Pillow, React, TypeScript, FastAPI, and Hyper Elements, the project allows users to process images, inspect algorithm behaviour, evaluate results, and turn experiments into structured, professional reports.
 
-| Area | Capabilities |
-|---|---|
-| Image input | Upload JPG, PNG, BMP, or WebP files; load a bundled sample; set a maximum image size for loading |
-| Point and colour operations | Negative, brightness, intensity scaling, contrast, thresholding, gamma and logarithmic transforms, grayscale, channel extraction/isolation/swapping/adjustment/elimination, and HSV decomposition |
-| Histogram and enhancement | Histogram display, stretching, equalization with CDF/mapping plot, global/Otsu/adaptive thresholding, and optional OpenCV validation |
-| Filtering and restoration | Mean, Gaussian, median, true mode, min/max, Laplacian, sharpening, unsharp mask, and outlier filtering; Gaussian or salt-and-pepper noise experiments with MSE/PSNR and reproducible random seeds |
-| Edge detection | Sobel, Prewitt, Roberts, and Canny, including gradient direction visualisation |
-| Morphology | Erosion, dilation, opening, closing, and boundary extraction using rectangular, cross, or elliptical structuring elements |
-| Algorithm comparison | Compare 2–6 operations on the same image, with parameters and timings displayed |
-| Analysis and reports | Dimensions, channels, mean, standard deviation, RMS/Michelson contrast, entropy, histograms, session history, HTML report export, and JSON history download |
+**Challenge submission: ChayaLab Scientific Report Kit**
 
-Operation pages show the method's purpose, relevant formula, and which parts use manual NumPy implementations.
+ChayaLab Scientific Report Kit is a reusable scientific reporting system built with [Hyper Elements](https://github.com/hyper-elements/hyper-elements). It transforms actual image-processing experiment data into six different report formats using a shared set of reusable templates.
 
-## Requirements
+One experiment. Six formats. Consistent scientific reporting.
 
-- Python 3.10 or newer (the recorded development environment used Python 3.12).
-- Dependencies listed in `requirements.txt`.
-- For tests, install the additional packages listed in `requirements-dev.txt`.
+---
 
-## Install and run
+## Hyper Elements Template Challenge Submission
 
-### Modern web interface (React + FastAPI)
+### ChayaLab Scientific Report Kit
 
-The existing Streamlit app remains available below. To run the new web interface, install the Python requirements and the Node dependencies, then start the API and Vite development server in separate terminals:
+Image-processing experiments produce more than just a processed image. They produce parameters, execution measurements, image statistics, comparisons, and observations that need to be presented clearly.
+
+ChayaLab Scientific Report Kit turns this information into structured scientific reports.
+
+It is integrated into the existing ChayaPictureLab application and uses the experiment data from the active user session rather than relying on fabricated report measurements.
+
+### Six output formats
+
+| Format        | Output  | Hyper Elements implementation               |
+| ------------- | ------- | ------------------------------------------- |
+| PDF Report    | `.pdf`  | `Document` + `renderPdf()`                  |
+| Web Report    | `.html` | `Page` + `render()`                         |
+| Print Report  | `.html` | Print-ready `Document` + `render()`         |
+| Image Summary | `.png`  | `Canvas` + `renderImage()`                  |
+| Email Report  | `.html` | `Email` + email-client compatibility plugin |
+| Email Text    | `.txt`  | Hyper Elements text rendering               |
+
+### What makes the report useful?
+
+The generated report can contain:
+
+- Experiment title, report ID, and generation timestamp.
+- Source image name and image dimensions.
+- Original and processed image previews.
+- Processing operation and its category.
+- Operation purpose and mathematical formula.
+- Parameters used during processing.
+- Processing execution time.
+- Mean image intensity.
+- Standard deviation.
+- Shannon entropy.
+- RMS contrast.
+- Optional reference-based quality measurements when valid comparison data is available.
+- User-provided notes and interpretation.
+
+The report uses the latest completed image-processing operation in the selected experiment session.
+
+### Meaningful use of Hyper Elements
+
+Hyper Elements is the rendering foundation of the Scientific Report Kit, not simply an additional frontend dependency.
+
+The implementation uses:
+
+- **Page:** Generates the web-based scientific report.
+- **Document:** Defines the print-friendly report and PDF document.
+- **Canvas:** Creates the visual PNG summary.
+- **Email:** Produces an email-compatible report and plain-text alternative.
+- **Reusable primitives:** Shared `Column`, `Row`, `Heading`, `Text`, and `Image` components maintain a consistent layout across output types.
+- **Validation:** Templates are validated before rendering.
+- **Email compatibility:** The email-client compatibility plugin helps identify rendering limitations across email clients.
+
+The reusable report structure is maintained in `report-engine/src/templates/`, while the rendering logic is implemented in `report-engine/src/renderers.tsx`.
+
+The live report service is implemented in `report-engine/src/server.ts`.
+
+### Architecture
+
+The reporting workflow uses the existing ChayaPictureLab experiment session.
+
+1. The user loads an image and performs an image-processing operation.
+2. React sends a report-generation request with the current session ID.
+3. The Express report service retrieves the experiment data from FastAPI.
+4. FastAPI validates the session and supplies the actual experiment information and image previews.
+5. Hyper Elements renders the selected output format.
+6. The generated report is returned to the frontend for downloading.
+
+```text
+ChayaPictureLab React Frontend
+          |
+          | POST /reports/{format}
+          | X-Session-Id
+          v
+Hyper Elements Report Service
+          |
+          | GET /api/report-data
+          | X-Session-Id
+          v
+Existing FastAPI Backend
+          |
+          v
+Active Experiment Session
+          |
+          +-- Source Image
+          +-- Processed Image
+          +-- Operation and Parameters
+          +-- Processing Time
+          +-- Image Statistics
+          |
+          v
+Hyper Elements Templates
+          |
+          +-- PDF
+          +-- HTML
+          +-- Print HTML
+          +-- PNG
+          +-- Email HTML
+          +-- Email Text
+```
+
+All live reports are rendered in memory for individual requests. User-specific report files are not written to a shared demo output directory.
+
+The separate demo command remains available for demonstrating the templates with clearly identified synthetic sample data.
+
+### Screenshots and rendered output
+
+The following screenshots demonstrate the actual integrated application and generated templates.
+
+**Report Studio inside ChayaPictureLab**
+
+
+
+**Generated scientific report**
+
+PDF
+
+
+
+JPG
+
+---
+
+## Main Project Features
+
+| Area                        | Capabilities                                                                                                                                                                                          |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Image input                 | Upload JPG, PNG, BMP, and WebP files; load bundled samples; configure maximum loading size                                                                                                            |
+| Point and colour operations | Negative, brightness, intensity scaling, contrast, thresholding, gamma and logarithmic transforms, grayscale, channel extraction, isolation, swapping, adjustment, elimination, and HSV decomposition |
+| Histogram and enhancement   | Histogram display, stretching, equalization, CDF mapping, global/Otsu/adaptive thresholding                                                                                                           |
+| Filtering and restoration   | Mean, Gaussian, median, true mode, minimum, maximum, Laplacian, sharpening, unsharp mask, and outlier filtering                                                                                       |
+| Noise experiments           | Gaussian and salt-and-pepper noise with reproducible random seeds, MSE, and PSNR                                                                                                                      |
+| Edge detection              | Sobel, Prewitt, Roberts, and Canny with gradient direction visualisation                                                                                                                              |
+| Mathematical morphology     | Erosion, dilation, opening, closing, and boundary extraction                                                                                                                                          |
+| Algorithm comparison        | Compare 2–6 operations on the same image with parameters and execution timings                                                                                                                        |
+| Image analysis              | Dimensions, channels, mean, standard deviation, RMS contrast, Michelson contrast, entropy, and histograms                                                                                             |
+| Experiment history          | Session-based operation history and JSON export                                                                                                                                                       |
+| Scientific reporting        | Existing HTML report and the six-format Hyper Elements Report Studio                                                                                                                                  |
+
+Operation pages display the method's purpose, relevant mathematical formula, parameters, and implementation details.
+
+## Technology Stack
+
+| Layer               | Technologies                                 |
+| ------------------- | -------------------------------------------- |
+| Image processing    | Python, NumPy, Pillow                        |
+| Existing interface  | Streamlit                                    |
+| Modern frontend     | React, TypeScript, Vite                      |
+| Backend API         | FastAPI                                      |
+| Report service      | Node.js, TypeScript, Express                 |
+| Report rendering    | Hyper Elements                               |
+| PDF generation      | `@hyper-elements/react/pdf`                  |
+| Image rendering     | `@hyper-elements/react/image`                |
+| Email compatibility | `@hyper-elements/email-clients`              |
+| Testing             | pytest, TypeScript checks, production builds |
+
+### Image-processing implementation
+
+The core processing routines in `chayalab/` are implemented using NumPy so that their mathematical steps can be inspected.
+
+OpenCV is used only for optional reference checks and validation. It does not generate the normal processing outputs of the application.
+
+---
+
+## Installation and Local Setup
+
+### Requirements
+
+- Python 3.10 or newer.
+- Node.js 20 or newer; Node.js 22 is recommended.
+- npm.
+- Dependencies listed in the project's requirements files.
+
+### 1. Clone the repository
 
 ```powershell
-python -m pip install -r requirements.txt
-python -m uvicorn api:app --reload --port 8000
+git clone https://github.com/Jai-Shankar1033/ChayaPictureLab.git
+
+cd ChayaPictureLab
+git switch feature/hyper-elements-report-kit
+```
+
+### 2. Configure the Python environment
+
+From the project root:
+
+```powershell
+py -m venv .venv
+
+.\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+
+python -m pip install -r requirements-render.txt
+```
+
+The API runtime requirements are separated from the complete Streamlit development requirements.
+
+### 3. Install the report-engine dependencies
+
+Open a separate terminal:
+
+```powershell
+cd report-engine
+
+npm ci
+```
+
+The report engine uses the installed Hyper Elements dependencies and email-client compatibility plugin.
+
+### 4. Install the frontend dependencies
+
+Open another terminal:
+
+```powershell
 cd frontend
-npm install
+
+npm ci
+```
+
+### 5. Start FastAPI
+
+From the repository root:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn api:app --reload --host 127.0.0.1 --port 8000
+```
+
+FastAPI runs at:
+
+`http://127.0.0.1:8000`
+
+Health endpoint:
+
+`http://127.0.0.1:8000/api/health`
+
+### 6. Start the Hyper Elements report service
+
+From `report-engine/`:
+
+```powershell
 npm run dev
 ```
 
-Open <http://localhost:5173>. Vite proxies `/api` requests to the local FastAPI service in development. In deployment, Vercel serves the React frontend from `frontend/dist` and proxies the original relative `/api/...` paths to the Render FastAPI service. Render starts the existing `api:app` entry point using `requirements-render.txt`; that file includes the API's external runtime dependencies and does not install Streamlit, Matplotlib, or OpenCV. The root `requirements.txt` remains available for the original Streamlit app and full local development.
+The report service runs at:
 
-#### Vercel + Render deployment
+`http://127.0.0.1:4100`
 
-1. Create a Render **Web Service** from the repository with root directory `.`, runtime **Python 3**, build command `pip install -r requirements-render.txt`, and start command `uvicorn api:app --host 0.0.0.0 --port $PORT`.
-2. After Render creates the service, replace `YOUR-RENDER-SERVICE` in the external API rewrite in `vercel.json` with the service's actual `onrender.com` hostname.
-3. Import the repository into Vercel with the repository root (`./`) as the project root and framework **Vite**. The install command, build command, output directory, API proxy, and React route fallback are in `vercel.json`.
-4. Deploy a Vercel preview and check `/api/health`, `/api/operations`, sample loading, image upload, and a real processing operation before promoting it.
-
-For this academic demonstration, the FastAPI API keeps uploaded source images, operation results, report images, and history in the process-local `SESSIONS` dictionary. Session data is temporary and may be lost when the backend restarts. The API accepts client-provided session IDs and is intended for demonstration use, not private multi-user production workloads.
-
-### Existing Streamlit interface
-
-### Windows PowerShell
-
-From the project root directory, run:
+Check its health:
 
 ```powershell
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-streamlit run main.py
+Invoke-RestMethod http://127.0.0.1:4100/health
 ```
 
-If PowerShell blocks activation, you can use the current-session setting below and then activate the environment:
+### 7. Start the React frontend
+
+From `frontend/`:
 
 ```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
+npm run dev
 ```
 
-### Windows Command Prompt
+Open:
 
-```bat
-py -m venv .venv
-call .venv\Scripts\activate.bat
-python -m pip install -r requirements.txt
-streamlit run main.py
-```
+`http://localhost:5173`
 
-### macOS or Linux
+Vite proxies `/api/*` requests to FastAPI and `/reports/*` requests to the Hyper Elements report service.
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-streamlit run main.py
-```
+### Local service overview
 
-The app normally opens at <http://localhost:8501>. Once dependencies are installed, routine local use does not require an internet connection.
+| Service                       | Local address           |
+| ----------------------------- | ----------------------- |
+| React frontend                | `http://localhost:5173` |
+| FastAPI backend               | `http://127.0.0.1:8000` |
+| Hyper Elements report service | `http://127.0.0.1:4100` |
 
-## Run the tests
+---
 
-Activate the virtual environment, then run:
+## Using the Report Studio
 
-```bash
+1. Open ChayaPictureLab in your browser.
+2. Upload an image or select a bundled sample.
+3. Select an image-processing operation.
+4. Configure its parameters and run it.
+5. Open **Analysis & reports**.
+6. Locate **Hyper Elements Report Studio**.
+7. Add optional experiment notes.
+8. Select the desired output format.
+9. Download the generated report.
+
+The report service retrieves experiment information from FastAPI using the active `X-Session-Id` header. The browser does not supply arbitrary image measurements for report generation.
+
+### Report API routes
+
+The report service supports the following endpoints:
+
+| Method | Route                 | Purpose             |
+| ------ | --------------------- | ------------------- |
+| POST   | `/reports/pdf`        | Generate PDF        |
+| POST   | `/reports/html`       | Generate web HTML   |
+| POST   | `/reports/print-html` | Generate print HTML |
+| POST   | `/reports/png`        | Generate PNG        |
+| POST   | `/reports/email-html` | Generate email HTML |
+| POST   | `/reports/email-text` | Generate email text |
+
+
+
+---
+
+
+
+### Python tests
+
+Install development dependencies:
+
+```powershell
 python -m pip install -r requirements-dev.txt
+
 python -m pytest -v
 ```
 
-A recorded test run is saved in `docs/test_results.txt`; run the tests locally to confirm results for your own Python version and computer. Additional validation notes are in `docs/validation_numbers.txt`.
+### Report-engine checks
 
-## Project layout
+From `report-engine/`:
 
-```text
-main.py                 Streamlit interface
-chayalab/
-  validation.py         Input checks and safe float-to-uint8 conversion
-  colorspace.py         RGB/BGR, grayscale, channels, and HSV operations
-  point_ops.py          Point transforms, thresholds, and image arithmetic
-  histogram.py          Histogram/PDF/CDF, stretching, equalization, Otsu, adaptive threshold
-  filters.py            Mean, Gaussian, median, mode, min/max, Laplacian, unsharp, outlier filters
-  noise.py              Gaussian and salt-and-pepper noise; restoration helpers
-  edges.py              Sobel, Prewitt, Roberts, and Canny
-  morphology.py         Structuring elements, erosion, dilation, opening, closing, boundaries
-  metrics.py            MSE, PSNR, entropy, contrast, and image statistics
-  registry.py           Operation definitions, parameters, and formulas for the UI
-  history.py            Session experiment history
-  report.py             HTML report export
-  io_utils.py           Image loading and saving with Pillow
-  reference.py          Optional OpenCV reference implementations for validation
- tests/                  Automated tests for algorithms, edge cases, and UI flows
- tools/make_samples.py   Generates bundled synthetic sample images
- samples/                Bundled synthetic sample images
- docs/                   Audit, originality review, known issues, test and output
+```powershell
+npm run typecheck
+
+npm run build
 ```
 
-## Algorithms and libraries
+### Frontend production build
 
-- **NumPy:** core array calculations and the project's manual implementations of point operations, colour conversion, histogram methods, filters, noise handling, edge detection, morphology, and metrics.
-- **Pillow:** image-file loading/saving, resizing on load, and report image encoding.
-- **Streamlit:** application interface and controls.
-- **Matplotlib:** plots and histogram visualisation.
-- **OpenCV:** optional reference comparison in validation tests and the app's validation control; not used to produce standard processed-image outputs.
-  ## Research Areas
+From `frontend/`:
 
-ChayaPictureLab explores the following areas of Digital Image Processing (DIP):
+```powershell
+npm run build
+```
 
-| Research Area | Topics Covered in ChayaPictureLab |
-|---|---|
-| Image Enhancement | Brightness adjustment, contrast enhancement, gamma correction, logarithmic transformation, and histogram equalization |
-| Colour Image Processing | RGB, grayscale, HSV decomposition, colour-channel extraction, isolation, swapping, and adjustment |
-| Histogram Processing and Thresholding | Histogram analysis, histogram stretching, equalization, Otsu thresholding, and adaptive thresholding |
-| Image Filtering and Restoration | Mean, Gaussian, median, mode, minimum, maximum, Laplacian, sharpening, and noise removal |
-| Edge Detection | Sobel, Prewitt, Roberts, and Canny edge detection with gradient direction analysis |
-| Mathematical Morphology | Erosion, dilation, opening, closing, and boundary extraction using different structuring elements |
-| Image Quality Assessment | Mean Squared Error (MSE), Peak Signal-to-Noise Ratio (PSNR), entropy, and contrast measurement |
-| Comparative Algorithm Analysis | Comparing multiple image-processing operations through output visualisation, parameter analysis, and execution time |
+Run these checks locally to validate the current environment.
+
+The demo renderer can also be used to generate showcase output:
+
+```powershell
+cd report-engine
+
+npm run demo
+```
+
+
+---
+
+## Project Structure
+
+```text
+ChayaPictureLab/
+│
+├── main.py
+├── api.py
+├── LICENSE
+├── requirements.txt
+├── requirements-render.txt
+├── requirements-dev.txt
+│
+├── frontend/
+│   └── src/
+│       ├── App.tsx
+│       └── components/
+│           └── ReportExportPanel.tsx
+│
+├── report-engine/
+│   ├── package.json
+│   ├── README.md
+│   └── src/
+│       ├── server.ts
+│       ├── renderers.tsx
+│       ├── types.ts
+│       ├── theme.ts
+│       ├── demo.tsx
+│       └── templates/
+│           ├── page.tsx
+│           ├── document.tsx
+│           ├── canvas.tsx
+│           ├── email.tsx
+│           └── shared.tsx
+│
+├── chayalab/
+│   ├── validation.py
+│   ├── colorspace.py
+│   ├── point_ops.py
+│   ├── histogram.py
+│   ├── filters.py
+│   ├── noise.py
+│   ├── edges.py
+│   ├── morphology.py
+│   ├── metrics.py
+│   ├── registry.py
+│   ├── history.py
+│   ├── report.py
+│   ├── io_utils.py
+│   └── reference.py
+│
+├── tests/
+├── tools/
+├── samples/
+└── docs/
+    └── screenshots/
+```
+
+---
+
+## Research Areas
+
+ChayaPictureLab explores the following areas of Digital Image Processing.
+
+| Research area                  | Topics                                                                                 |
+| ------------------------------ | -------------------------------------------------------------------------------------- |
+| Image enhancement              | Brightness, contrast, gamma correction, logarithmic transforms, histogram equalization |
+| Colour image processing        | RGB, grayscale, HSV decomposition, colour-channel operations                           |
+| Histogram processing           | Histograms, stretching, equalization, Otsu and adaptive thresholding                   |
+| Filtering and restoration      | Spatial filters, noise generation, noise removal                                       |
+| Edge detection                 | Sobel, Prewitt, Roberts and Canny                                                      |
+| Mathematical morphology        | Erosion, dilation, opening, closing and boundaries                                     |
+| Image quality assessment       | MSE, PSNR, entropy and contrast                                                        |
+| Comparative algorithm analysis | Output comparison, parameter analysis and processing time                              |
+
+---
 
 ## Research Papers and Academic References
 
-The development and theoretical study of ChayaPictureLab are supported by established research publications and academic references in Digital Image Processing.
-
-### Selected Research Papers
+### Selected research papers
 
 **[1] Automatic Image Thresholding**
 
 N. Otsu, "A Threshold Selection Method from Gray-Level Histograms," *IEEE Transactions on Systems, Man, and Cybernetics*, vol. 9, no. 1, pp. 62–66, January 1979.
 
-DOI: https://doi.org/10.1109/TSMC.1979.4310076
+DOI: [https://doi.org/10.1109/TSMC.1979.4310076](https://doi.org/10.1109/TSMC.1979.4310076)
 
-Application: Provides the theoretical foundation for Otsu's automatic image thresholding method used in the project.
+Application: Theoretical foundation for Otsu's automatic image thresholding.
 
 **[2] Edge Detection**
 
 J. Canny, "A Computational Approach to Edge Detection," *IEEE Transactions on Pattern Analysis and Machine Intelligence*, vol. PAMI-8, no. 6, pp. 679–698, 1986.
 
-DOI: https://doi.org/10.1109/TPAMI.1986.4767851
+DOI: [https://doi.org/10.1109/TPAMI.1986.4767851](https://doi.org/10.1109/TPAMI.1986.4767851)
 
-Application: Provides the research foundation for Canny edge detection and the study of image boundaries.
+Application: Research foundation for Canny edge detection.
 
 **[3] Image Filtering and Restoration**
 
 T. S. Huang, G. J. Yang, and G. Y. Tang, "A Fast Two-Dimensional Median Filtering Algorithm," *IEEE Transactions on Acoustics, Speech, and Signal Processing*, vol. 27, no. 1, pp. 13–18, February 1979.
 
-DOI: https://doi.org/10.1109/TASSP.1979.1163188
+DOI: [https://doi.org/10.1109/TASSP.1979.1163188](https://doi.org/10.1109/TASSP.1979.1163188)
 
-Application: Provides research background for two-dimensional median filtering and noise reduction.
+Application: Research background for median filtering and image noise reduction.
 
-### Foundational Academic Textbooks
+### Foundational academic textbooks
 
 **[4] Digital Image Processing**
 
@@ -187,24 +480,58 @@ Rafael C. Gonzalez and Richard E. Woods, *Digital Image Processing*, 4th Edition
 
 ISBN: 9789353062989.
 
-Application: Provides the broader theoretical background for image enhancement, filtering, histogram processing, image restoration, segmentation, and image analysis.
-
 **[5] Mathematical Morphology**
 
 Jean Serra, *Image Analysis and Mathematical Morphology*, Academic Press, 1982.
 
-Application: Provides the mathematical foundation for morphological operations, including erosion, dilation, opening, and closing.
+---
+
+## Known Limitations
+
+- The FastAPI application currently stores experiment sessions in an in-memory `SESSIONS` dictionary. Restarting the backend clears active session data.
+- Multiple backend instances do not automatically share session state.
+- The current live report focuses on the latest completed operation in the selected session.
+- Reference-based quality measurements such as MSE and PSNR should only be reported when valid reference-comparison data is available.
+- Email reports intentionally omit image previews.
+- Large image operations and report rendering can require significant CPU and memory.
+- The current session-ID mechanism is intended for the academic demonstration and is not a substitute for production authentication and persistent storage.
+
+A persistent storage and authentication layer would be required before exposing the application as a public, multi-user production service.
+
+---
+
+## Challenge Submission Notes
+
+**Submission:** ChayaLab Scientific Report Kit
+
+**Challenge:** Hyper Elements Template Challenge 2026
+
+**Repository:** [ChayaPictureLab](https://github.com/Jai-Shankar1033/ChayaPictureLab)
+
+**Implementation branch:** [feature/hyper-elements-report-kit](https://github.com/Jai-Shankar1033/ChayaPictureLab/tree/feature/hyper-elements-report-kit)
+
+The complete implementation source, reusable templates, local setup instructions, and report-generation service are included in this branch.
+
+A live deployment is not required for the challenge. The project can be reproduced locally using the instructions above.
+
+---
+
+## License
+
+ChayaPictureLab is distributed under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Jai Shankar.
+
+The MIT License applies to the project's original work. Third-party libraries and dependencies remain subject to their respective licenses.
+
+---
 
 ## Acknowledgment
 
-ChayaPictureLab acknowledges the researchers and academic authors whose published work has contributed to the development of Digital Image Processing. The research papers and textbooks listed above were used as academic references to understand the mathematical concepts, working principles, and theoretical foundations of the image-processing techniques explored in this project.
+ChayaPictureLab acknowledges the researchers and academic authors whose published work contributed to the theoretical foundations of Digital Image Processing.
 
-Their contributions provide valuable knowledge for studying image enhancement, thresholding, filtering, restoration, edge detection, and mathematical morphology.
+The project also uses open-source technologies, including Python, NumPy, Pillow, React, FastAPI, and Hyper Elements.
 
-The project applies these concepts through its own Python and NumPy-based processing implementations. The references are credited for their research contributions and theoretical foundations.
+The Scientific Report Kit uses Hyper Elements to create reusable, structured, and multi-format reports from image-processing experiments.
 
-
-
-## Known limitations
-
-See docs/KNOWN_ISSUES.md. For example, the mode filter may be slow on large colour images, and geometric operations such as resizing and rotation are not included as processing operations in this lab.
+Research publications are credited for their theoretical contributions, while the project's processing routines and reporting templates are implemented as part of ChayaPictureLab.
