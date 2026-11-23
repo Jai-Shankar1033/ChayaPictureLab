@@ -121,23 +121,31 @@ All live reports are rendered in memory for individual requests. User-specific r
 
 The separate demo command remains available for demonstrating the templates with clearly identified synthetic sample data.
 
-### Screenshots and rendered output
+## Screenshots and Rendered Output
 
-The following screenshots demonstrate the actual integrated application and generated templates.
+The following screenshots demonstrate the actual ChayaPictureLab integration and report templates generated using Hyper Elements.
 
-**Report Studio inside ChayaPictureLab**
+### Part 1: Hyper Elements Report Studio Interface
 
+The integrated Report Studio provides six export formats within the ChayaPictureLab application.
 
+<img width="939" alt="Hyper Elements Report Studio Interface" src="https://github.com/user-attachments/assets/c1e8ee34-87be-4e7a-bee2-272790ba57b7" />
 
-**Generated scientific report**
+### Part 2: Generated Scientific Reports
 
-PDF
+The same experiment data can be rendered into multiple professional report formats.
 
+**A. JPG Scientific Report Preview**
 
+Generated using the Hyper Elements Canvas template.
 
-JPG
+<img width="1200" alt="ChayaLab JPG Scientific Report" src="https://github.com/user-attachments/assets/4d40217e-4431-4c56-995f-d0cd1a8938f5" />
 
----
+**B. PDF Scientific Report**
+
+Generated using the Hyper Elements Document template.
+
+<img width="404" alt="ChayaLab PDF Scientific Report" src="https://github.com/user-attachments/assets/5d3628d3-17e0-464f-b8e5-bc100ea249a7" />
 
 ## Main Project Features
 
